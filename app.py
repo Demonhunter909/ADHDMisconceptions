@@ -71,10 +71,10 @@ def get_db():
     return psycopg2.connect(**get_db_config())
 
 def init_db():
-    try:
-        conn = get_db()
-        cursor = conn.cursor()
+    conn = get_db()
+    cursor = conn.cursor()
 
+    try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS users (
                 id SERIAL PRIMARY KEY,
@@ -84,7 +84,13 @@ def init_db():
                 max_children INTEGER DEFAULT 0
             );
         """)
+        conn.commit()
+        print("✓ Users table created")
+    except psycopg2.Error as e:
+        conn.rollback()
+        print(f"Error creating users table: {e}")
 
+    try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS uploads (
                 id SERIAL PRIMARY KEY,
@@ -97,7 +103,13 @@ def init_db():
                 cover_image TEXT
             );
         """)
+        conn.commit()
+        print("✓ Uploads table created")
+    except psycopg2.Error as e:
+        conn.rollback()
+        print(f"Error creating uploads table: {e}")
 
+    try:
         cursor.execute("""
             CREATE TABLE IF NOT EXISTS sessions (
                 id SERIAL PRIMARY KEY,
@@ -106,16 +118,14 @@ def init_db():
                 expiry TIMESTAMP NOT NULL
             );
         """)
-
         conn.commit()
-        conn.close()
-        print("Database tables initialized successfully!")
+        print("✓ Sessions table created")
     except psycopg2.Error as e:
-        print(f"Database initialization error: {e}")
-        raise
-    except Exception as e:
-        print(f"Unexpected error during database initialization: {e}")
-        raise
+        conn.rollback()
+        print(f"Error creating sessions table: {e}")
+
+    conn.close()
+    print("Database initialization complete!")
 
 @app.route("/init")
 def init_route():
