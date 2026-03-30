@@ -127,6 +127,13 @@ def init_db():
     conn.close()
     print("Database initialization complete!")
 
+# Initialize database on app startup
+try:
+    init_db()
+except Exception as e:
+    print(f"⚠ Warning: Database initialization failed on startup: {e}")
+    print("Tables may not exist. Visit /init to create them manually.")
+
 @app.route("/init")
 def init_route():
     try:
