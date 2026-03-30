@@ -342,7 +342,11 @@ def upload():
         conn.close()
 
         flash("URL uploaded successfully!", "success")
-        return redirect(f"/{category}")
+        # Redirect to the correct page
+        if category == "home":
+            return redirect("/")
+        else:
+            return redirect(f"/{category}")
 
     # GET request: load existing uploads + slideshow
     conn = get_db()
@@ -378,7 +382,11 @@ def delete_url(url_id):
     conn.close()
 
     flash("URL deleted", "success")
-    return redirect(f"/{category}")
+    # Redirect to the correct page
+    if category == "home":
+        return redirect("/")
+    else:
+        return redirect(f"/{category}")
 
 @app.route("/uploads/<path:filename>")
 def uploaded_file(filename):
