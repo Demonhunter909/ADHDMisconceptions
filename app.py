@@ -44,14 +44,30 @@ def make_session_permanent():
     session.permanent = True
     app.logger.debug(f"Session data: {dict(session)}")
 
+def get_db_config():
+    config = {
+        "host": os.getenv("DB_HOST"),
+        "port": os.getenv("DB_PORT", "5432"),
+        "database": os.getenv("DB_NAME"),
+        "user": os.getenv("DB_USER"),
+        "password": os.getenv("DB_PASSWORD"),
+    }
+    env_names = {
+        "host": "DB_HOST",
+        "database": "DB_NAME",
+        "user": "DB_USER",
+        "password": "DB_PASSWORD",
+    }
+    missing = [env_names[name] for name, value in config.items() if name in env_names and not value]
+    if missing:
+        missing_vars = ", ".join(missing)
+        raise RuntimeError(
+            f"Database configuration is missing. Set these environment variables: {missing_vars}."
+        )
+    return config
+
 def get_db():
-    return psycopg2.connect(
-        host=os.getenv("DB_HOST"),
-        port=os.getenv("DB_PORT", "5432"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
+    return psycopg2.connect(**get_db_config())
 
 def init_db():
     conn = get_db()
