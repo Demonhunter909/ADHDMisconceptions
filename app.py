@@ -51,6 +51,7 @@ def get_db_config():
         "database": os.getenv("DB_NAME"),
         "user": os.getenv("DB_USER"),
         "password": os.getenv("DB_PASSWORD"),
+        "sslmode": os.getenv("DB_SSLMODE", "require"),  # Neon requires SSL
     }
     env_names = {
         "host": "DB_HOST",
@@ -70,43 +71,51 @@ def get_db():
     return psycopg2.connect(**get_db_config())
 
 def init_db():
-    conn = get_db()
-    cursor = conn.cursor()
+    try:
+        conn = get_db()
+        cursor = conn.cursor()
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            parent_id INTEGER,
-            max_children INTEGER DEFAULT 0
-        );
-    """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                id SERIAL PRIMARY KEY,
+                username TEXT UNIQUE NOT NULL,
+                password TEXT NOT NULL,
+                parent_id INTEGER,
+                max_children INTEGER DEFAULT 0
+            );
+        """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS uploads (
-            id SERIAL PRIMARY KEY,
-            url TEXT NOT NULL,
-            category TEXT NOT NULL,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            user_id INTEGER REFERENCES users(id),
-            title TEXT,
-            description TEXT,
-            cover_image TEXT
-        );
-    """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS uploads (
+                id SERIAL PRIMARY KEY,
+                url TEXT NOT NULL,
+                category TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                user_id INTEGER REFERENCES users(id),
+                title TEXT,
+                description TEXT,
+                cover_image TEXT
+            );
+        """)
 
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS sessions (
-            id SERIAL PRIMARY KEY,
-            session_id VARCHAR(255) UNIQUE NOT NULL,
-            data BYTEA NOT NULL,
-            expiry TIMESTAMP NOT NULL
-        );
-    """)
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS sessions (
+                id SERIAL PRIMARY KEY,
+                session_id VARCHAR(255) UNIQUE NOT NULL,
+                data BYTEA NOT NULL,
+                expiry TIMESTAMP NOT NULL
+            );
+        """)
 
-    conn.commit()
-    conn.close()
+        conn.commit()
+        conn.close()
+        print("Database tables initialized successfully!")
+    except psycopg2.Error as e:
+        print(f"Database initialization error: {e}")
+        raise
+    except Exception as e:
+        print(f"Unexpected error during database initialization: {e}")
+        raise
 
 @app.route("/init")
 def init_route():
