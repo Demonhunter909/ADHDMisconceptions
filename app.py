@@ -176,6 +176,39 @@ def get_paginated_all(page, per_page=16):
 
     return items[start:end], total_pages
 
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        confirm = request.form.get("confirm_password")
+
+        if not username or not password or not confirm:
+            flash("All fields required", "error")
+            return redirect("/register")
+
+        if password != confirm:
+            flash("Passwords do not match", "error")
+            return redirect("/register")
+
+        hashed = generate_password_hash(password)
+        parent_id = session.get("user_id")
+
+        conn = get_db()
+        cursor = conn.cursor()
+
+        try:
+            cursor.execute("""
+                INSERT INTO users (username, password, parent_id)
+                VALUES (%s, %s, %s)
+                RETURNING id
+            """, (username, hashed, parent_id))
+            user_id = cursor.fetchone()[0]
+        except psycopg2.Error:
+            flash("Username already exists", "error")
+            conn.close()
+            return redirect("/register")
+
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
