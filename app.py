@@ -134,6 +134,10 @@ except Exception as e:
     print(f"⚠ Warning: Database initialization failed on startup: {e}")
     print("Tables may not exist. Visit /init to create them manually.")
 
+@app.route("/favicon.ico")
+def favicon():
+    return send_from_directory(app.root_path, "favicon.ico", mimetype="image/x-icon")
+
 @app.route("/init")
 def init_route():
     try:
