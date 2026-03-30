@@ -204,10 +204,19 @@ def register():
                 RETURNING id
             """, (username, hashed, parent_id))
             user_id = cursor.fetchone()[0]
+            conn.commit()
+            conn.close()
+            
+            session["user_id"] = user_id
+            session["username"] = username
+            flash(f"Account created successfully! Welcome, {username}!", "success")
+            return redirect("/")
         except psycopg2.Error:
             flash("Username already exists", "error")
             conn.close()
             return redirect("/register")
+    
+    return render_template("register.html", username=session.get("username"))
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
