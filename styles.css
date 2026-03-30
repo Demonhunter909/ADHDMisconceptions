@@ -1,0 +1,31 @@
+.navbar {
+    background-color: rgb(255, 0, 98);
+    padding: 20px;
+    text-align: center;
+}
+
+body {
+    color: rgb(255, 0, 98);
+    background-color: orange;
+}
+
+.indent, p, h1, h4 {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.indent_img {
+    margin: 20px auto;
+    max-width: 90%;
+    border: 2px solid grey;
+    border-radius: 8px;
+}
+
+h1, h4 {
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+p {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
