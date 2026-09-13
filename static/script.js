@@ -16,19 +16,23 @@ async function main() {
 document.getElementById("opinionForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
   const q1 = document.getElementById("q1").value;
   const q2 = document.getElementById("q2").value;
   const q3 = document.getElementById("q3").value;
 
   const { data, error } = await client
     .from("opinions")
-    .insert([{ q1, q2, q3 }]);
+    .insert([{ name, email, q1, q2, q3 }]);
 
   if (error) {
     console.error(error);
     return;
   }
 
+  document.getElementById("name").value = "";
+  document.getElementById("email").value = "";
   document.getElementById("q1").value = "";
   document.getElementById("q2").value = "";
   document.getElementById("q3").value = "";
@@ -52,7 +56,7 @@ async function loadOpinions() {
   container.innerHTML = opinions
     .map(op => `
       <div class="opinion-card">
-        <h3>User Submission</h3>
+        <h3>User Submission By: ${op.name}</h3>
         <p><strong>What I've Learned:</strong> ${op.q1}</p>
         <p><strong>What I'll Take Away:</strong> ${op.q2}</p>
         <p><strong>How I'll Counter Misconceptions:</strong> ${op.q3}</p>
