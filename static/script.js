@@ -53,9 +53,9 @@ async function loadOpinions() {
     .map(op => `
       <div class="opinion-card">
         <h3>User Submission</h3>
-        <p><strong>Misconception:</strong> ${op.q1}</p>
-        <p><strong>Daily Life:</strong> ${op.q2}</p>
-        <p><strong>Understanding:</strong> ${op.q3}</p>
+        <p><strong>What I've Learned:</strong> ${op.q1}</p>
+        <p><strong>What I'll Take Away:</strong> ${op.q2}</p>
+        <p><strong>How I'll Counter Misconceptions:</strong> ${op.q3}</p>
         <span>${new Date(op.created_at).toLocaleString()}</span>
       </div>
     `)
