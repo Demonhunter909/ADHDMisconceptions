@@ -1,7 +1,4 @@
 import os
-from hpack import table
-import datetime
-import time
 import math
 from typing import Optional
 from flask import Flask, flash, redirect, render_template, request, session, send_from_directory, url_for, jsonify
@@ -197,6 +194,7 @@ def adminpanel():
         total_pages=total_pages
     )
 
+    return render_template("adminpanel.html", username=session.get("username"), uploads=uploads)
 
 @app.route("/upload", methods=["GET", "POST"])
 @login_required

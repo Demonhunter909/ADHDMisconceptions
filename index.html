@@ -70,11 +70,11 @@
                 {% for item in uploads %}
                     <div class="col-md-3 mb-4">
                         <div class="url-card p-3 border rounded h-100">
-                            <p class="card-title">{{ item[2] }}</p>
-                            <p class="card-description">{{ item[3] }}</p>
-                            {% if item[5] %}
-                                <a href="{{ item[1] }}" target="_blank">
-                                    <img src="{{ item[5] }}" alt="Cover Image" class="img-fluid">
+                            <p class="card-title">{{ item["title"] }}</p>
+                            <p class="card-description">{{ item["description"] }}</p>
+                            {% if item["cover_image"] %}
+                                <a href="{{ item["title"] }}" target="_blank">
+                                    <img src="{{ item["cover_image"] }}" alt="Cover Image" class="img-fluid">
                                 </a>
                             {% else %}
                                 <p>No cover image</p>
