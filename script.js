@@ -1,3 +1,12 @@
+const supabase = supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY
+);
+
+console.log("Testing Supabase connection...");
+const { data, error } = await supabase.from("opinions").select("*");
+console.log("Supabase test:", data, error);
+
 document.getElementById("opinionForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
