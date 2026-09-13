@@ -45,3 +45,34 @@
                 </ul>
             </div>
         </nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-container">
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                    <div class="opinion-container">
+                            <form id="opinionForm">
+                                <label for="q1">What have you learned?</label>
+                                <textarea id="q1" placeholder="Write what you've learned..." required></textarea>
+
+                                <label for="q2">What will you take away from this?</label>
+                                <textarea id="q2" placeholder="Write what you will take away from this..." required></textarea>
+
+                                <label for="q3">How will you counter these misconceptions?</label>
+                                <textarea id="q3" placeholder="Write how you will work to counter misconceptions..." required></textarea>
+
+                                <button type="submit">Submit</button>
+                            </form>
+                    </div>
+            </div> 
+        </div>
+    </body>
+</html>

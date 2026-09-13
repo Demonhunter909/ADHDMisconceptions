@@ -1,4 +1,5 @@
 import os
+from hpack import table
 import psycopg2
 import datetime
 import time
@@ -123,6 +124,22 @@ def init_db():
     except psycopg2.Error as e:
         conn.rollback()
         print(f"Error creating sessions table: {e}")
+
+    try:
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS opinions (
+                id UUID PRIMARY KEY DEFAULT GEN_RANDOM_UUID(),
+                q1 TEXT NOT NULL,
+                q2 TEXT NOT NULL,
+                q3 TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        """)
+        conn.commit()
+        print("✓ Opinions table created")
+    except psycopg2.Error as e:
+        conn.rollback()
+        print(f"Error creating opinions table: {e}")
 
     conn.close()
     print("Database initialization complete!")
