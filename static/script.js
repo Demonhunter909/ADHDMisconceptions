@@ -1,5 +1,9 @@
+const SUPABASE_URL = "https://hblecztskfvltuerwmmr.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhibGVjenRza2Z2bHR1ZXJ3bW1yIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyNjk5MDQsImV4cCI6MjA5NTg0NTkwNH0.s1aULx9Shcd4awS1EeiG5R5KiQQWZNHAAqj3Isfg0YM";
+
 const { createClient } = supabase;
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 async function main() {
   console.log("Testing Supabase connection...");
