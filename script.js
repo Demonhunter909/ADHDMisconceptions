@@ -1,10 +1,13 @@
 const { createClient } = supabase;
-
 const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-console.log("Testing Supabase connection...");
-const { data, error } = await client.from("opinions").select("*");
-console.log("Supabase test:", data, error);
+async function main() {
+  console.log("Testing Supabase connection...");
+  const { data, error } = await client.from("opinions").select("*");
+  console.log("Supabase test:", data, error);
+
+  loadOpinions();
+}
 
 document.getElementById("opinionForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -54,3 +57,5 @@ async function loadOpinions() {
     `)
     .join("");
 }
+
+main();
