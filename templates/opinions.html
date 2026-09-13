@@ -9,28 +9,28 @@
             const SUPABASE_URL = "{{ SUPABASE_URL }}";
             const SUPABASE_ANON_KEY = "{{ SUPABASE_KEY }}";
         </script>
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
         <title>ADHD Misconception | Home</title>
-        <script type="module" src="/static/script.js"></script>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <script type="module" src="{{ url_for('static', filename='script.js') }}"></script>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <nav class="navbar sticky-top navbar-expand-lg">
-            <a class=" navbar-brand" href="{{ url_for('index') }}"><b>ADHD Misconceptions</b></a>
+            <a class=" navbar-brand" href="{{ url_for('templates',filename='index.html') }}"><b>ADHD Misconceptions</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle-navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('slideshows') }}">Slideshows and Materials</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='slideshows.html') }}">Slideshows and Materials</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('opinions') }}">Opinions</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='opinions.html') }}">Opinions</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='about.html') }}">About</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -40,10 +40,10 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
                             {% if username %}
-                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout ({{ username }})</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('adminpanel') }}">Admin Panel</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='logout.html') }}">Logout ({{ username }})</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='adminpanel.html') }}">Admin Panel</a></li>
                             {% else %}
-                                <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='login.html') }}">Login</a></li>
                             {% endif %}
                         </ul>
                     </li>                   
@@ -63,28 +63,22 @@
         {% endwith %}
         <div class="container mt-5">
             <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <h2 class="text-center mb-4">Register</h2>
-                    <form action="{{ url_for('register') }}" method="post">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Username</label>
-                            <input type="text" class="form-control" id="username" name="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" name="password" required>
-                        </div>
+                <h1 class="text-center mb-4">Share Your Opinions and How You Will Counter Misconceptions!</h1>
+                    <div class="opinion-container">
+                            <form id="opinionForm">
+                                <label for="q1">What have you learned?</label>
+                                <textarea id="q1" placeholder="Write what you've learned..." required></textarea>
 
-                        <div class="mb-3">
-                            <label for="confirm_password" class="form-label">Confirm Password</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Register</button>
-                    </form>
+                                <label for="q2">What will you take away from this?</label>
+                                <textarea id="q2" placeholder="Write what you will take away from this..." required></textarea>
 
-                    <p class="text-center mt-3">
-                        Already have an account? <a class="nav-link" href="{{ url_for('login') }}">Login here.</a>
-                    </p>
-                </div>
-            </div>
+                                <label for="q3">How will you counter these misconceptions?</label>
+                                <textarea id="q3" placeholder="Write how you will work to counter misconceptions..." required></textarea>
+
+                                <button type="submit">Submit</button>
+                            </form>
+                    </div>
+            </div> 
         </div>
+    </body>
+</html>

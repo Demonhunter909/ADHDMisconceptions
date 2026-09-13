@@ -9,28 +9,28 @@
             const SUPABASE_URL = "{{ SUPABASE_URL }}";
             const SUPABASE_ANON_KEY = "{{ SUPABASE_KEY }}";
         </script>
-        <link href="/static/styles.css" rel="stylesheet">
+        <link href="{{ url_for('static', filename='styles.css') }}" rel="stylesheet">
         <title>ADHD Misconception | Home</title>
-        <script type="module" src="/static/script.js"></script>
-        <link rel="icon" type="image/x-icon" href="/favicon.ico">
+        <script type="module" src="{{ url_for('static', filename='script.js') }}"></script>
+        <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
     </head>
     <body>
         <nav class="navbar sticky-top navbar-expand-lg">
-            <a class=" navbar-brand" href="{{ url_for('index') }}"><b>ADHD Misconceptions</b></a>
+            <a class=" navbar-brand" href="{{ url_for('templates',filename='index.html') }}"><b>ADHD Misconceptions</b></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle-navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('slideshows') }}">Slideshows and Materials</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='slideshows.html') }}">Slideshows and Materials</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('opinions') }}">Opinions</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='opinions.html') }}">Opinions</a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ url_for('about') }}">About</a>
+                        <a class="nav-link" href="{{ url_for('templates',filename='about.html') }}">About</a>
                     </li>
                 </ul>
                 <ul class="navbar-nav ms-auto">
@@ -40,10 +40,10 @@
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="accountDropdown">
                             {% if username %}
-                                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Logout ({{ username }})</a></li>
-                                <li><a class="dropdown-item" href="{{ url_for('adminpanel') }}">Admin Panel</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='logout.html') }}">Logout ({{ username }})</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='adminpanel.html') }}">Admin Panel</a></li>
                             {% else %}
-                                <li><a class="dropdown-item" href="{{ url_for('login') }}">Login</a></li>
+                                <li><a class="dropdown-item" href="{{ url_for('templates',filename='login.html') }}">Login</a></li>
                             {% endif %}
                         </ul>
                     </li>                   
@@ -61,46 +61,24 @@
                 </div>
             {% endif %}
         {% endwith %}
-        <h1 style="text-align: center;">Welcome to the Admin Panel!</h1>
-        <h4 style="text-align: center;">Welcome, {{ username }}!</h4>
+        <h1 style="text-align: center;">Here are our Slideshows and Materials!</h1>
+        <h4 style="text-align: center;">Take a look below at what we've done!</h4>
         <hr class="solid">
-        <h2 style="text-align: left;">Upload content below.</h2>
-        <form action="/upload" method="POST" enctype="multipart/form-data">
-            <label>Title:</label>
-            <input type="text" name="title" required>
-            <label>Description (optional):</label>
-            <textarea name="description"></textarea>
-            <label>URL:</label>
-            <input type="text" name="url" required>
-            <label>Choose Page:</label>
-            <select name="category" required>
-                <option value="home">Homepage</option>
-                <option value="slideshows">Slideshows and Materials</option>
-            </select>
-            <label>Cover Image (optional but preferred):</label>
-            <input type="file" name="cover_image" accept="image/*">
-            <button type="submit">Upload</button>
-        </form>        
-        <h2>All Uploaded Content</h2>
-
+        <h2 style="text-align: center;">Our resources!</h2>
         <div class="container mt-4">
             <div class="row">
                 {% for item in uploads %}
                     <div class="col-md-3 mb-4">
                         <div class="url-card p-3 border rounded h-100">
-                            <p class="card-title">{{ item[2] }}</p>
-                            <p class="card-description">{{ item[3] }}</p>
-                            {% if item[5] %}
-                                <a href="{{ item[1] }}" target="_blank">
-                                    <img src="{{ item[5] }}" alt="Cover Image" class="img-fluid">
+                            <p class="card-title">{{ item["title"] }}</p>
+                            <p class="card-description">{{ item["description"] }}</p>
+                            {% if item["cover_image"] %}
+                                <a href="{{ item["title"] }}" target="_blank">
+                                    <img src="{{ item["cover_image"] }}" alt="Cover Image" class="img-fluid">
                                 </a>
                             {% else %}
                                 <p>No cover image</p>
                             {% endif %}
-                            <p><strong>Category:</strong> {{ item[4] }}</p>
-                            <div class="card-actions mt-2">
-                                <a href="/delete-url/{{ item[0] }}" class="btn btn-danger btn-sm" onclick="return confirm('Delete this link?')">Delete</a>
-                            </div>
                         </div>
                     </div>
                 {% endfor %}
@@ -130,3 +108,4 @@
         </nav>
     </body>
 </html>
+
