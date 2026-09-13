@@ -204,25 +204,11 @@ def upload():
         description = request.form.get("description")
         url = request.form.get("url")
         category = request.form.get("category")
-        image = request.files.get("cover_image")
+        cover_image = request.form.get("cover_image_url")
 
         if not url or not category or not title:
             flash("Title, URL, and category required", "error")
             return redirect("/upload")
-
-        public_url = None
-        if image and image.filename:
-            filename = secure_filename(image.filename)
-            unique_name = f"{uuid4()}-{filename}"
-            file_bytes = image.read()
-
-            result = supabase.storage.from_("uploads").upload(unique_name, file_bytes)
-
-            if isinstance(result, dict) and "error" in result:
-                flash("Failed to upload image to storage", "error")
-                return redirect("/upload")
-
-            public_url = supabase.storage.from_("uploads").get_public_url(unique_name)
 
         supabase.table("uploads").insert({
             "url": url,
@@ -230,7 +216,7 @@ def upload():
             "user_id": session["user_id"],
             "title": title,
             "description": description,
-            "cover_image": public_url
+            "cover_image": cover_image
         }).execute()
 
         flash("URL uploaded successfully!", "success")
