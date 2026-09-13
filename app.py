@@ -286,6 +286,13 @@ def slideshows():
 
     return render_template("slideshows.html", uploads=uploads, page=page, total_pages=total_pages, username=session.get("username"))
 
+@app.route("/opinions")
+def opinions():
+    page = int(request.args.get("page", 1))
+    uploads, total_pages = get_paginated_category("opinions", page)
+
+    return render_template("opinions.html", uploads=uploads, page=page, total_pages=total_pages, username=session.get("username"))
+
 @app.route("/about")
 def about():
     page = int(request.args.get("page", 1))
