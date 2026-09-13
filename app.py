@@ -15,7 +15,7 @@ supabase: Optional[Client] = None
 if SUPABASE_URL and SUPABASE_KEY:
     supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
-app = Flask(__name__, static_folder=".", static_url_path="", template_folder=".")
+app = Flask(__name__, static_folder="static", template_folder="templates")
 
 # Session configuration - use Flask's built-in secure cookies
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(days=7)
