@@ -180,6 +180,13 @@ def about():
     
     return render_template("about.html", uploads=uploads, page=page, total_pages=total_pages, username=session.get("username"))
 
+@app.route("/projectarchive")
+def projectarchive():
+    page = int(request.args.get("page", 1))
+    uploads, total_pages = get_paginated_category("projectarchive", page)
+
+    return render_template("projectarchive.html", uploads=uploads, page=page, total_pages=total_pages, username=session.get("username"))
+
 @app.route("/adminpanel")
 @login_required
 def adminpanel():
